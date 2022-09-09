@@ -1,0 +1,46 @@
+<%- include('partials/headers'); %>
+<div class="center">
+    <h6>Clientes</h6>
+    <% if (type=='LISTA' ) { %>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>DNI</th>
+                        <th>Nombre</th>
+                        <th>Apellido 1</th>
+                        <th>Apellido 2</th>
+                        <th>dirección</th>
+                        <th>Email</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for (var u of lista) { %>
+                        <tr>
+                            <td>
+                                <%= u.dni%>
+                            </td>
+                            <td>
+                                <%= u.nombre %>
+                            </td>
+                            <td>
+                                <%= u.apellido1 %>
+                            </td>
+                            <td>
+                                <%= u.apellido2 %>
+                            </td>
+                            <td>
+                                <%= u.direccion %>
+                            </td>
+                            <td>
+                                <%= u.email %>
+                            </td>
+                        </tr>
+                        <%} %>
+                </tbody>
+            </table>
+        </div>
+        <% } %>
+</div>
+<%- include('partials/footers'); %>
+
