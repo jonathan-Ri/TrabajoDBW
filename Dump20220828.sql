@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.30, for macos12 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.29, for Win64 (x86_64)
 --
--- Host: 127.0.0.1    Database: alerta_emergencia
+-- Host: localhost    Database: alerta
 -- ------------------------------------------------------
--- Server version	8.0.30
+-- Server version	8.0.29
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -16,145 +16,162 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `Administrador`
+-- Table structure for table `administradors`
 --
 
-DROP TABLE IF EXISTS `Administrador`;
+DROP TABLE IF EXISTS `administradors`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `Administrador` (
-  `Nombres` varchar(30) NOT NULL,
-  `Apellidos` varchar(30) NOT NULL,
-  `RUT` int NOT NULL,
-  `contraseña` varchar(20) NOT NULL,
-  `telefono` int NOT NULL,
-  PRIMARY KEY (`RUT`)
+CREATE TABLE `administradors` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `permisos` int DEFAULT NULL,
+  `createdAt` datetime NOT NULL,
+  `updatedAt` datetime NOT NULL,
+  `UsuarioId` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `UsuarioId` (`UsuarioId`),
+  CONSTRAINT `administradors_ibfk_1` FOREIGN KEY (`UsuarioId`) REFERENCES `usuarios` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `Administrador`
+-- Dumping data for table `administradors`
 --
 
-LOCK TABLES `Administrador` WRITE;
-/*!40000 ALTER TABLE `Administrador` DISABLE KEYS */;
-/*!40000 ALTER TABLE `Administrador` ENABLE KEYS */;
+LOCK TABLES `administradors` WRITE;
+/*!40000 ALTER TABLE `administradors` DISABLE KEYS */;
+/*!40000 ALTER TABLE `administradors` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `Alerta`
+-- Table structure for table `alarmas`
 --
 
-DROP TABLE IF EXISTS `Alerta`;
+DROP TABLE IF EXISTS `alarmas`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `Alerta` (
-  `fecha` date NOT NULL,
-  `ID` varchar(30) NOT NULL,
-  `tipo_emergencia` varchar(30) NOT NULL,
-  `hora` varchar(7) NOT NULL,
-  `estado` varchar(20) NOT NULL,
-  `observacion` varchar(50) NOT NULL,
-  `RUT_administrador` int NOT NULL,
-  `RUT_representante` int NOT NULL,
-  `RUT_personas` int NOT NULL,
-  PRIMARY KEY (`ID`),
-  KEY `Alerta_fk_Administrador` (`RUT_administrador`),
-  KEY `Alerta_fk_Personas` (`RUT_personas`),
-  KEY `Alerta_fk_Representante_organismo` (`RUT_representante`),
-  CONSTRAINT `Alerta_fk_Administrador` FOREIGN KEY (`RUT_administrador`) REFERENCES `Administrador` (`RUT`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `Alerta_fk_Personas` FOREIGN KEY (`RUT_personas`) REFERENCES `Personas` (`RUT_usuario`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `Alerta_fk_Representante_organismo` FOREIGN KEY (`RUT_representante`) REFERENCES `Representante_organismo` (`RUT_usuario`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `alarmas` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `tipo_emergencia` varchar(255) DEFAULT NULL,
+  `estado` varchar(255) DEFAULT NULL,
+  `observacion` varchar(255) DEFAULT NULL,
+  `localizacion` varchar(255) DEFAULT NULL,
+  `createdAt` datetime NOT NULL,
+  `updatedAt` datetime NOT NULL,
+  `PersonaId` int DEFAULT NULL,
+  `AdministradorId` int DEFAULT NULL,
+  `OrganismoId` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `PersonaId` (`PersonaId`),
+  KEY `AdministradorId` (`AdministradorId`),
+  KEY `OrganismoId` (`OrganismoId`),
+  CONSTRAINT `alarmas_ibfk_1` FOREIGN KEY (`PersonaId`) REFERENCES `personas` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `alarmas_ibfk_2` FOREIGN KEY (`AdministradorId`) REFERENCES `administradors` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `alarmas_ibfk_3` FOREIGN KEY (`OrganismoId`) REFERENCES `organismos` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `Alerta`
+-- Dumping data for table `alarmas`
 --
 
-LOCK TABLES `Alerta` WRITE;
-/*!40000 ALTER TABLE `Alerta` DISABLE KEYS */;
-/*!40000 ALTER TABLE `Alerta` ENABLE KEYS */;
+LOCK TABLES `alarmas` WRITE;
+/*!40000 ALTER TABLE `alarmas` DISABLE KEYS */;
+INSERT INTO `alarmas` VALUES (11,'Intoxicacion','1','1','1','2022-11-07 22:22:41','2022-11-07 22:22:41',NULL,NULL,NULL),(13,'Atropello','1','1','1','2022-11-07 23:06:43','2022-11-07 23:06:43',NULL,NULL,NULL),(14,'Atropello','1','Cámíón atropesha adulto que jugaba en su patio','Ruta 68 km 34','2022-11-07 23:09:16','2022-11-07 23:09:16',NULL,NULL,NULL),(15,'Atropello','1','1','1','2022-11-07 23:16:28','2022-11-07 23:16:28',NULL,NULL,NULL),(16,'Intoxicacion','1','1','1','2022-11-07 23:17:04','2022-11-07 23:17:04',NULL,NULL,NULL);
+/*!40000 ALTER TABLE `alarmas` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `Personas`
+-- Table structure for table `organismos`
 --
 
-DROP TABLE IF EXISTS `Personas`;
+DROP TABLE IF EXISTS `organismos`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `Personas` (
-  `Discapacidad` varchar(30) NOT NULL,
-  `calle_direccion` varchar(20) NOT NULL,
-  `ciudad_direccion` varchar(30) NOT NULL,
-  `RUT_usuario` int NOT NULL,
-  PRIMARY KEY (`RUT_usuario`),
-  CONSTRAINT `Personas_fk_Usuarios` FOREIGN KEY (`RUT_usuario`) REFERENCES `Usuarios` (`RUT`) ON DELETE CASCADE ON UPDATE CASCADE
+CREATE TABLE `organismos` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `Organismo` varchar(255) DEFAULT NULL,
+  `Cargo` varchar(255) DEFAULT NULL,
+  `createdAt` datetime NOT NULL,
+  `updatedAt` datetime NOT NULL,
+  `UsuarioId` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `UsuarioId` (`UsuarioId`),
+  CONSTRAINT `organismos_ibfk_1` FOREIGN KEY (`UsuarioId`) REFERENCES `usuarios` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `Personas`
+-- Dumping data for table `organismos`
 --
 
-LOCK TABLES `Personas` WRITE;
-/*!40000 ALTER TABLE `Personas` DISABLE KEYS */;
-/*!40000 ALTER TABLE `Personas` ENABLE KEYS */;
+LOCK TABLES `organismos` WRITE;
+/*!40000 ALTER TABLE `organismos` DISABLE KEYS */;
+/*!40000 ALTER TABLE `organismos` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `Representante_Organismo`
+-- Table structure for table `personas`
 --
 
-DROP TABLE IF EXISTS `Representante_Organismo`;
+DROP TABLE IF EXISTS `personas`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `Representante_Organismo` (
-  `cargo` varchar(20) NOT NULL,
-  `organismo` varchar(30) NOT NULL,
-  `RUT_usuario` int NOT NULL,
-  PRIMARY KEY (`RUT_usuario`),
-  CONSTRAINT `Representante_Organismo_fk_Usuarios` FOREIGN KEY (`RUT_usuario`) REFERENCES `Usuarios` (`RUT`) ON DELETE CASCADE ON UPDATE CASCADE
+CREATE TABLE `personas` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `Discapacidad` varchar(255) DEFAULT NULL,
+  `Calle` varchar(255) DEFAULT NULL,
+  `Ciudad` varchar(255) DEFAULT NULL,
+  `createdAt` datetime NOT NULL,
+  `updatedAt` datetime NOT NULL,
+  `UsuarioId` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `UsuarioId` (`UsuarioId`),
+  CONSTRAINT `personas_ibfk_1` FOREIGN KEY (`UsuarioId`) REFERENCES `usuarios` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `Representante_Organismo`
+-- Dumping data for table `personas`
 --
 
-LOCK TABLES `Representante_Organismo` WRITE;
-/*!40000 ALTER TABLE `Representante_Organismo` DISABLE KEYS */;
-/*!40000 ALTER TABLE `Representante_Organismo` ENABLE KEYS */;
+LOCK TABLES `personas` WRITE;
+/*!40000 ALTER TABLE `personas` DISABLE KEYS */;
+/*!40000 ALTER TABLE `personas` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `Usuarios`
+-- Table structure for table `usuarios`
 --
 
-DROP TABLE IF EXISTS `Usuarios`;
+DROP TABLE IF EXISTS `usuarios`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `Usuarios` (
-  `Nombres` varchar(30) NOT NULL,
-  `Apellidos` varchar(30) NOT NULL,
-  `RUT` int NOT NULL,
-  `contraseña` varchar(20) NOT NULL,
-  `telefono` int NOT NULL,
-  `RUT_administrador` int DEFAULT NULL,
-  PRIMARY KEY (`RUT`),
-  KEY `Usuarios_fk_Administrador` (`RUT_administrador`),
-  CONSTRAINT `Usuarios_fk_Administrador` FOREIGN KEY (`RUT_administrador`) REFERENCES `Usuarios` (`RUT`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `usuarios` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `Nombres` varchar(255) DEFAULT NULL,
+  `apellidos` varchar(255) DEFAULT NULL,
+  `direccion` varchar(255) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL,
+  `edad` int DEFAULT NULL,
+  `telefono` int DEFAULT NULL,
+  `RUT` varchar(255) DEFAULT NULL,
+  `estado` tinyint(1) DEFAULT NULL,
+  `createdAt` datetime NOT NULL,
+  `updatedAt` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `Usuarios`
+-- Dumping data for table `usuarios`
 --
 
-LOCK TABLES `Usuarios` WRITE;
-/*!40000 ALTER TABLE `Usuarios` DISABLE KEYS */;
-/*!40000 ALTER TABLE `Usuarios` ENABLE KEYS */;
+LOCK TABLES `usuarios` WRITE;
+/*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
+INSERT INTO `usuarios` VALUES (1,'1','1','1','asdasdas@gmail.com','1',1,1,'1',1,'2022-11-07 14:20:11','2022-11-07 14:20:11'),(2,'1','1','1','1@gmail.com','1',1,1,'1',1,'2022-11-07 23:03:43','2022-11-07 23:03:43'),(3,'1','1','1','1@gmail.com','1',1,1,'1',1,'2022-11-07 23:31:32','2022-11-07 23:31:32'),(4,'1','1','1','juan@gmail.com','1',31,1,'1',1,'2022-11-07 23:38:59','2022-11-07 23:38:59'),(5,'1','1','1','juan@gmail.com','1',31,1,'1',1,'2022-11-07 23:38:59','2022-11-07 23:38:59');
+/*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -166,4 +183,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-08-28 18:10:46
+-- Dump completed on 2022-11-08 12:05:29
